@@ -1,4 +1,3 @@
-Readme
 # Poker Hand History Organization and Preperation for ML with Spark (GGPoker). 
 
 ## Table of Contents
