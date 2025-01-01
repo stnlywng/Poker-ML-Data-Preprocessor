@@ -27,9 +27,12 @@ Flexible and extensible for processing poker game data across multiple stages of
 
 
 ## Sample Usage
+```bash
+spark-submit main.py --format [json/parquet] --input ./path/to/data --output ./path/to/output
+```
 
 ### Input - (PokerCraft Hand History)
-In this example, Hero has a single action in each stage of the game.
+In this example, Hero has a single action in each stage of the game. Ran with spark-submit main.py --format json --input ./data2 --output ./output2
 ```text
 Poker Hand #TM54069188: Tournament #3035883, Bounty Hunters $5.25 Hold'em No Limit - Level6(150/300) - 2024/11/20 21:16:09
 Table '7' 8-max Seat #4 is the button
@@ -253,41 +256,72 @@ Seat 8: 41187f7f folded before Flop
 - **Python 3.8+**: Primary programming language, Version for Spark Support.
 - **Git**: Version control for collaborative development.
 
----
+[//]: # (---)
 
-## Setup and Installation
+[//]: # ()
+[//]: # (## Setup and Installation)
 
-### Prerequisites
-- Python 3.8 or later.
-- Apache Spark installed and configured.
-- Java 8+ installed.
-- pipenv or virtualenv for managing dependencies (optional).
+[//]: # ()
+[//]: # (### Prerequisites)
 
-### Installation Steps
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/your-repo/pyspark-poker-project.git
-   cd pyspark-poker-project
-   ```
+[//]: # (- Python 3.8 or later.)
 
-2. **Set up a Python Environment**:
-   Using `pipenv`:
-   ```bash
-   pipenv install
-   pipenv shell
-   ```
-   Or using `virtualenv`:
-   ```bash
-   python3 -m venv env
-   source env/bin/activate
-   pip install -r requirements.txt
-   ```
+[//]: # (- Apache Spark installed and configured.)
 
-3. **Configure Spark**:
-   Ensure `SPARK_HOME` is set and add Spark binaries to your PATH.
+[//]: # (- Java 8+ installed.)
 
-4. **Run Tests**:
-   Verify installation with tests:
-   ```bash
-   python -m unittest discover tests
-   ```
+[//]: # (- pipenv or virtualenv for managing dependencies &#40;optional&#41;.)
+
+[//]: # ()
+[//]: # (### Installation Steps)
+
+[//]: # (1. **Clone the Repository**:)
+
+[//]: # (   ```bash)
+
+[//]: # (   git clone https://github.com/your-repo/pyspark-poker-project.git)
+
+[//]: # (   cd pyspark-poker-project)
+
+[//]: # (   ```)
+
+[//]: # ()
+[//]: # (2. **Set up a Python Environment**:)
+
+[//]: # (   Using `pipenv`:)
+
+[//]: # (   ```bash)
+
+[//]: # (   pipenv install)
+
+[//]: # (   pipenv shell)
+
+[//]: # (   ```)
+
+[//]: # (   Or using `virtualenv`:)
+
+[//]: # (   ```bash)
+
+[//]: # (   python3 -m venv env)
+
+[//]: # (   source env/bin/activate)
+
+[//]: # (   pip install -r requirements.txt)
+
+[//]: # (   ```)
+
+[//]: # ()
+[//]: # (3. **Configure Spark**:)
+
+[//]: # (   Ensure `SPARK_HOME` is set and add Spark binaries to your PATH.)
+
+[//]: # ()
+[//]: # (4. **Run Tests**:)
+
+[//]: # (   Verify installation with tests:)
+
+[//]: # (   ```bash)
+
+[//]: # (   python -m unittest discover tests)
+
+[//]: # (   ```)
