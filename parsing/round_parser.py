@@ -9,7 +9,6 @@ def split_by_round(content):
             if current_round:
                 round_data.append("\n".join(current_round))
                 current_round = []
-#        elif line.
         current_round.append(line)
 
     if current_round:

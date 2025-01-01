@@ -1,17 +1,31 @@
+import argparse
 from src.config import INPUT_DIRECTORY, OUTPUT_DIRECTORY
-from src.schemas import preflop_schema
-from src.schemas.schemas import flop_schema, turn_schema, river_schema
+from src.schemas import preflop_schema, flop_schema, turn_schema, river_schema
 from src.spark_session import get_spark_session
 from src.parsing import read_files, split_by_round, ggpoker_to_schema
 
 def main():
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description="Process poker data and save to specified format.")
+    parser.add_argument("--format", type=str, choices=["json", "parquet"], required=True,
+                        help="Output format: 'json' or 'parquet'.")
+    parser.add_argument("--input", type=str, required=False, default=INPUT_DIRECTORY,
+                        help="Input directory (default from config).")
+    parser.add_argument("--output", type=str, required=False, default=OUTPUT_DIRECTORY,
+                        help="Output directory (default from config).")
+
+    args = parser.parse_args()
+    output_format = args.format
+    input_dir = args.input
+    output_dir = args.output
+
+    # Initialize Spark session
     spark = get_spark_session()
 
-    file_content_only = read_files(spark, INPUT_DIRECTORY)
+    # Read and process data
+    file_content_only = read_files(spark, input_dir)
     all_rounds = file_content_only.flatMap(split_by_round)
     type_and_table = all_rounds.flatMap(ggpoker_to_schema)
-
-    print(type_and_table.take(1))
 
     preflop_data = type_and_table.filter(lambda x: x[0][0] == "pf")
     flop_data = type_and_table.filter(lambda x: x[0][0] == "f")
@@ -24,16 +38,11 @@ def main():
     turn_df = spark.createDataFrame(turn_data, schema=turn_schema)
     river_df = spark.createDataFrame(river_data, schema=river_schema)
 
-    preflop_df.show(truncate=False)
-    flop_df.show(truncate=False)
-    turn_df.show(truncate=False)
-    river_df.show(truncate=False)
-
-    # Write DataFrames to Parquet
-    preflop_df.write.mode("overwrite").json("output/preflop") #.parquet("output/preflop")
-    flop_df.write.mode("overwrite").json("output/flop")#.parquet("output/flop")
-    turn_df.write.mode("overwrite").json("output/turn")#.parquet("output/turn")
-    river_df.write.mode("overwrite").json("output/river")#.parquet("output/river")
+    # Write DataFrames to the specified format and directories
+    preflop_df.write.mode("overwrite").format(output_format).save(f"{output_dir}/preflop")
+    flop_df.write.mode("overwrite").format(output_format).save(f"{output_dir}/flop")
+    turn_df.write.mode("overwrite").format(output_format).save(f"{output_dir}/turn")
+    river_df.write.mode("overwrite").format(output_format).save(f"{output_dir}/river")
 
     spark.stop()
 
