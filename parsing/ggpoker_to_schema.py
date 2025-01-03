@@ -327,15 +327,15 @@ def calculate_start_round_stacks(uid_to_seatstack, preflop_actions = None, flop_
     if preflop_actions:
         for seat, action, count in preflop_actions:
             if count:
-                tracker[seat] += count
+                tracker[seat] -= count
     if flop_actions:
         for seat, action, count in flop_actions:
             if count:
-                tracker[seat] += count
+                tracker[seat] -= count
     if turn_actions:
         for seat, action, count in turn_actions:
             if count:
-                tracker[seat] += count
+                tracker[seat] -= count
 
     return list(tracker.items())
 
