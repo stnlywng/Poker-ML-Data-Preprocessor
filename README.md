@@ -1,4 +1,4 @@
-# Poker Hand History Organization and Preperation for ML with Spark (GGPoker). 
+# Poker Hand History Organization and Preperation for ML with Spark (PokerCraft). 
 
 ## Table of Contents
 1. [Project Overview](#project-overview)
