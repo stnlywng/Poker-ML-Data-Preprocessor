@@ -109,30 +109,33 @@ Seat 8: 41187f7f folded before Flop
     "blinds": 300,
     "start_round_pot": 765,
     "start_round_stacks": [
-      { "player": "lj", "stack": 9955 },
-      { "player": "hj", "stack": 12802 },
-      { "player": "co", "stack": 26640 },
-      { "player": "btn", "stack": 7260 },
-      { "player": "sb", "stack": 40120 },
-      { "player": "bb", "stack": 32126 }
+      {"player": "lj", "stack": 9955},
+      {"player": "hj", "stack": 12802},
+      {"player": "co", "stack": 26640},
+      {"player": "btn", "stack": 7260},
+      {"player": "sb", "stack": 40120},
+      {"player": "bb", "stack": 32126}
     ],
     "actions_in_round": [
-      { "player": "lj", "action": "posts", "amount": 45 },
-      { "player": "sb", "action": "posts", "amount": 45 },
-      { "player": "lj", "action": "posts", "amount": 45 },
-      { "player": "btn", "action": "posts", "amount": 45 },
-      { "player": "co", "action": "posts", "amount": 45 },
-      { "player": "bb", "action": "posts", "amount": 45 },
-      { "player": "hj", "action": "posts", "amount": 45 },
-      { "player": "sb", "action": "posts", "amount": 150 },
-      { "player": "bb", "action": "posts", "amount": 300 },
-      { "player": "lj", "action": "folds" },
-      { "player": "lj", "action": "folds" },
-      { "player": "hj", "action": "folds" },
-      { "player": "co", "action": "raises", "amount": 600 }
+      {"player": "lj", "action": "posts", "amount": 45},
+      {"player": "sb", "action": "posts", "amount": 45},
+      {"player": "lj", "action": "posts", "amount": 45},
+      {"player": "btn", "action": "posts", "amount": 45},
+      {"player": "co", "action": "posts", "amount": 45},
+      {"player": "bb", "action": "posts", "amount": 45},
+      {"player": "hj", "action": "posts", "amount": 45},
+      {"player": "sb", "action": "posts", "amount": 150},
+      {"player": "bb", "action": "posts", "amount": 300},
+      {"player": "lj", "action": "folds"},
+      {"player": "lj", "action": "folds"},
+      {"player": "hj", "action": "folds"},
+      {"player": "co", "action": "raises", "amount": 600}
     ]
   },
-  "label": { "action": "calls", "size": 600 }
+  "label": {
+    "action": "calls",
+    "size": 600
+  }
 }
 ```
 
@@ -148,38 +151,41 @@ Seat 8: 41187f7f folded before Flop
     "blinds": 300,
     "start_round_pot": 2715,
     "start_round_stacks": [
-      { "player": "lj", "stack": 10045 },
-      { "player": "hj", "stack": 12847 },
-      { "player": "co", "stack": 27285 },
-      { "player": "btn", "stack": 7905 },
-      { "player": "sb", "stack": 40765 },
-      { "player": "bb", "stack": 32771 }
+      {"player": "lj", "stack": 9865},
+      {"player": "hj", "stack": 12757},
+      {"player": "co", "stack": 25995},
+      {"player": "btn", "stack": 6615},
+      {"player": "sb", "stack": 39475},
+      {"player": "bb", "stack": 31481}
     ],
     "actions_in_round": [
-      { "player": "sb", "action": "bets", "amount": 300 },
-      { "player": "bb", "action": "raises", "amount": 750 },
-      { "player": "co", "action": "calls", "amount": 750 }
+      {"player": "sb", "action": "bets", "amount": 300},
+      {"player": "bb", "action": "raises", "amount": 750},
+      {"player": "co", "action": "calls", "amount": 750}
     ],
     "preflop_actions": [
-      { "player": "lj", "action": "posts", "amount": 45 },
-      { "player": "sb", "action": "posts", "amount": 45 },
-      { "player": "lj", "action": "posts", "amount": 45 },
-      { "player": "btn", "action": "posts", "amount": 45 },
-      { "player": "co", "action": "posts", "amount": 45 },
-      { "player": "bb", "action": "posts", "amount": 45 },
-      { "player": "hj", "action": "posts", "amount": 45 },
-      { "player": "sb", "action": "posts", "amount": 150 },
-      { "player": "bb", "action": "posts", "amount": 300 },
-      { "player": "lj", "action": "folds" },
-      { "player": "lj", "action": "folds" },
-      { "player": "hj", "action": "folds" },
-      { "player": "co", "action": "raises", "amount": 600 },
-      { "player": "btn", "action": "calls", "amount": 600 },
-      { "player": "sb", "action": "calls", "amount": 450 },
-      { "player": "bb", "action": "calls", "amount": 300 }
+      {"player": "lj", "action": "posts", "amount": 45},
+      {"player": "sb", "action": "posts", "amount": 45},
+      {"player": "lj", "action": "posts", "amount": 45},
+      {"player": "btn", "action": "posts", "amount": 45},
+      {"player": "co", "action": "posts", "amount": 45},
+      {"player": "bb", "action": "posts", "amount": 45},
+      {"player": "hj", "action": "posts", "amount": 45},
+      {"player": "sb", "action": "posts", "amount": 150},
+      {"player": "bb", "action": "posts", "amount": 300},
+      {"player": "lj", "action": "folds"},
+      {"player": "lj", "action": "folds"},
+      {"player": "hj", "action": "folds"},
+      {"player": "co", "action": "raises", "amount": 600},
+      {"player": "btn", "action": "calls", "amount": 600},
+      {"player": "sb", "action": "calls", "amount": 450},
+      {"player": "bb", "action": "calls", "amount": 300}
     ]
   },
-  "label": { "action": "calls", "size": 750 }
+  "label": {
+    "action": "calls",
+    "size": 750
+  }
 }
 ```
 
@@ -196,21 +202,47 @@ Seat 8: 41187f7f folded before Flop
     "blinds": 300,
     "start_round_pot": 5265,
     "start_round_stacks": [
-      { "player": "lj", "stack": 10045 },
-      { "player": "hj", "stack": 12847 },
-      { "player": "co", "stack": 28035 },
-      { "player": "btn", "stack": 8655 },
-      { "player": "sb", "stack": 41065 },
-      { "player": "bb", "stack": 33521 }
+      {"player": "lj", "stack": 9865},
+      {"player": "hj", "stack": 12757},
+      {"player": "co", "stack": 25245},
+      {"player": "btn", "stack": 5865},
+      {"player": "sb", "stack": 39175},
+      {"player": "bb", "stack": 30731}
     ],
     "actions_in_round": [
-      { "player": "bb", "action": "checks" },
-      { "player": "co", "action": "bets", "amount": 1738 }
+      {"player": "bb", "action": "checks"},
+      {"player": "co", "action": "bets", "amount": 1738}
     ],
-    "preflop_actions": [...],
-    "flop_actions": [...]
+    "preflop_actions": [
+      {"player": "lj", "action": "posts", "amount": 45},
+      {"player": "sb", "action": "posts", "amount": 45},
+      {"player": "lj", "action": "posts", "amount": 45},
+      {"player": "btn", "action": "posts", "amount": 45},
+      {"player": "co", "action": "posts", "amount": 45},
+      {"player": "bb", "action": "posts", "amount": 45},
+      {"player": "hj", "action": "posts", "amount": 45},
+      {"player": "sb", "action": "posts", "amount": 150},
+      {"player": "bb", "action": "posts", "amount": 300},
+      {"player": "lj", "action": "folds"},
+      {"player": "lj", "action": "folds"},
+      {"player": "hj", "action": "folds"},
+      {"player": "co", "action": "raises", "amount": 600},
+      {"player": "btn", "action": "calls", "amount": 600},
+      {"player": "sb", "action": "calls", "amount": 450},
+      {"player": "bb", "action": "calls", "amount": 300}
+    ],
+    "flop_actions": [
+      {"player": "sb", "action": "bets", "amount": 300},
+      {"player": "bb", "action": "raises", "amount": 750},
+      {"player": "co", "action": "calls", "amount": 750},
+      {"player": "btn", "action": "calls", "amount": 750},
+      {"player": "sb", "action": "folds"}
+    ]
   },
-  "label": { "action": "calls", "size": 1738 }
+  "label": {
+    "action": "calls",
+    "size": 1738
+  }
 }
 ```
 
@@ -228,22 +260,52 @@ Seat 8: 41187f7f folded before Flop
     "blinds": 300,
     "start_round_pot": 10479,
     "start_round_stacks": [
-      { "player": "lj", "stack": 10045 },
-      { "player": "hj", "stack": 12847 },
-      { "player": "co", "stack": 29773 },
-      { "player": "btn", "stack": 10393 },
-      { "player": "sb", "stack": 41065 },
-      { "player": "bb", "stack": 35259 }
+      {"player": "lj", "stack": 9865},
+      {"player": "hj", "stack": 12757},
+      {"player": "co", "stack": 23507},
+      {"player": "btn", "stack": 4127},
+      {"player": "sb", "stack": 39175},
+      {"player": "bb", "stack": 28993}
     ],
     "actions_in_round": [
-      { "player": "bb", "action": "checks" },
-      { "player": "co", "action": "checks" }
+      {"player": "bb", "action": "checks"},
+      {"player": "co", "action": "checks"}
     ],
-    "preflop_actions": [...],
-    "flop_actions": [...],
-    "turn_actions": [...]
+    "preflop_actions": [
+      {"player": "lj", "action": "posts", "amount": 45},
+      {"player": "sb", "action": "posts", "amount": 45},
+      {"player": "lj", "action": "posts", "amount": 45},
+      {"player": "btn", "action": "posts", "amount": 45},
+      {"player": "co", "action": "posts", "amount": 45},
+      {"player": "bb", "action": "posts", "amount": 45},
+      {"player": "hj", "action": "posts", "amount": 45},
+      {"player": "sb", "action": "posts", "amount": 150},
+      {"player": "bb", "action": "posts", "amount": 300},
+      {"player": "lj", "action": "folds"},
+      {"player": "lj", "action": "folds"},
+      {"player": "hj", "action": "folds"},
+      {"player": "co", "action": "raises", "amount": 600},
+      {"player": "btn", "action": "calls", "amount": 600},
+      {"player": "sb", "action": "calls", "amount": 450},
+      {"player": "bb", "action": "calls", "amount": 300}
+    ],
+    "flop_actions": [
+      {"player": "sb", "action": "bets", "amount": 300},
+      {"player": "bb", "action": "raises", "amount": 750},
+      {"player": "co", "action": "calls", "amount": 750},
+      {"player": "btn", "action": "calls", "amount": 750},
+      {"player": "sb", "action": "folds"}
+    ],
+    "turn_actions": [
+      {"player": "bb", "action": "checks"},
+      {"player": "co", "action": "bets", "amount": 1738},
+      {"player": "btn", "action": "calls", "amount": 1738},
+      {"player": "bb", "action": "calls", "amount": 1738}
+    ]
   },
-  "label": { "action": "checks" }
+  "label": {
+    "action": "checks"
+  }
 }
 ```
 
