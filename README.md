@@ -31,7 +31,7 @@ spark-submit main.py --format [json/parquet] --input ./path/to/data --output ./p
 ```
 
 ### Input - (PokerCraft Hand History)
-In this example, Hero has a single action in each stage of the game. Ran with spark-submit main.py --format json --input ./data2 --output ./output2
+In this example, Hero has a single action in each stage of the game. Ran with spark-submit main.py --format json --input ./data --output ./output
 ```text
 Poker Hand #TM54069188: Tournament #3035883, Bounty Hunters $5.25 Hold'em No Limit - Level6(150/300) - 2024/11/20 21:16:09
 Table '7' 8-max Seat #4 is the button
