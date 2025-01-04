@@ -27,13 +27,13 @@ def get_position_name(num_players, seat, btn):
         return "sb"
     elif loc == 2:
         return "bb"
-    elif loc == (num_players - 1):
+    elif loc == (num_players - 1): #[6]
         return "co"
-    elif loc == (num_players - 2):
+    elif loc == (num_players - 2): #[5]
         return "hj"
     elif loc == 3:
         return "utg1"
-    elif loc == (num_players - 3):
+    elif loc == (num_players - 3): #[4]
         return "lj"
     elif loc == 4:
         return "utg2"
@@ -44,10 +44,12 @@ def get_position_name(num_players, seat, btn):
 def populate_uid_to_seatstack_map(working_map, lines, num_players, btn):
     i = 0
     while "Seat" in lines[2 + i]:
+        print("working on line: ", lines[2 + i])
         extract = re.findall(uid_seat_stack_regex, lines[2 + i])
         seat, uid, chip_count = extract[0]
         chip_count = chip_count.replace(',', '')
-        working_map[uid] = (get_position_name(num_players, int(seat), btn), int(chip_count))
+        print(f"found uid {uid} with {seat} with {chip_count}")
+        working_map[uid] = (get_position_name(num_players, (i + 1), btn), int(chip_count))
         i += 1
 
 # Count by how many "in chips" are present.
