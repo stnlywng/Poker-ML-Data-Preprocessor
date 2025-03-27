@@ -3,15 +3,16 @@ import re
 extract_button_regex = r"#(\d+)"
 uid_seat_stack_regex = r"Seat (\d+): (\w+) \(([\d,]+) in chips\)"
 hole_card_regex = r"Dealt to Hero \[([^\s\]]+)\s+([^\s\]]+)\]"
-blinds_regex = r"posts big blind (\d+)"
+blinds_regex = r"(?:Level\d+\((\d+(?:,\d{3})*)/(\d+(?:,\d{3})*)\)|Hold'em No Limit \((\d+)/(\d+)\))"
 
 posts_regex = r"(\w+):.*\b(\d+)$"
 raise_regex = r"(\S+): (\w+) \d+(?:,\d+)* to (\d+(?:,\d+)*)"
 normal_action_regex = r"(\S+): (\w+)(?: (\d+(?:,\d+)*))?"
 
-flop_pattern = r"\*\*\* FLOP \*\*\* \[([2-9TJQKA][hdcs]) ([2-9TJQKA][hdcs]) ([2-9TJQKA][hdcs])\]"
-turn_pattern = r"\*\*\* TURN \*\*\* \[[2-9TJQKA][hdcs] [2-9TJQKA][hdcs] [2-9TJQKA][hdcs]\] \[([2-9TJQKA][hdcs])\]"
-river_pattern = r"\*\*\* RIVER \*\*\* \[[2-9TJQKA][hdcs] [2-9TJQKA][hdcs] [2-9TJQKA][hdcs] [2-9TJQKA][hdcs]\] \[([2-9TJQKA][hdcs])\]"
+# Accomodate for just *** FLOP *** and *** FIRST FLOP *** cases.
+flop_pattern = r"FLOP \*\*\* \[([2-9TJQKA][hdcs]) ([2-9TJQKA][hdcs]) ([2-9TJQKA][hdcs])\]"
+turn_pattern = r"TURN \*\*\* \[[2-9TJQKA][hdcs] [2-9TJQKA][hdcs] [2-9TJQKA][hdcs]\] \[([2-9TJQKA][hdcs])\]"
+river_pattern = r"RIVER \*\*\* \[[2-9TJQKA][hdcs] [2-9TJQKA][hdcs] [2-9TJQKA][hdcs] [2-9TJQKA][hdcs]\] \[([2-9TJQKA][hdcs])\]"
 
 # Table '1' 8-max Seat #6 is the button
 def extract_button(line):
@@ -21,7 +22,9 @@ def extract_button(line):
 
 def get_position_name(num_players, seat, btn):
     loc = (seat - btn) % num_players
-    if loc == 0:
+    if loc == 0 and num_players == 2:
+        return "bb"
+    elif loc == 0:
         return "btn"
     elif loc == 1:
         return "sb"
@@ -45,8 +48,10 @@ def populate_uid_to_seatstack_map(working_map, lines, num_players, btn):
     i = 0
     while "Seat" in lines[2 + i]:
         extract = re.findall(uid_seat_stack_regex, lines[2 + i])
+        if len(extract) == 0:
+            for p in lines:
+                print(repr(p))
         seat, uid, chip_count = extract[0]
-        chip_count = chip_count.replace(',', '')
         working_map[uid] = (get_position_name(num_players, (i + 1), btn), int(chip_count))
         i += 1
 
@@ -57,11 +62,21 @@ def extract_num_players(round):
 
 # posts big blind 160
 def extract_blinds(round):
-
     match = re.search(blinds_regex, round)
-    j = match.group(1)
+    
     if match:
-        return int(match.group(1))
+        # Check if it's a cash game format (groups 3 and 4) or tournament format (groups 1 and 2)
+        if match.group(3) and match.group(4):
+            # Cash game format
+            if int(match.group(4)) == 0:
+                return int(match.group(3)) * 2
+            return int(match.group(4))
+        else:
+            # Tournament format
+            return int(match.group(2).replace(',', ''))
+    else:
+        print(f"Warning: Could not extract blinds from: {round}")
+        return None
 
 # Dealt to Hero [2s 8h]
 def extract_hole(round):
@@ -99,7 +114,7 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
             if "posts" in line:
                 t = re.findall(posts_regex, line)
                 uid, chip_count = t[0]
-                chip_count = int(chip_count.replace(',', ''))
+                chip_count = int(chip_count)
                 seat, stack = uid_to_seatstack[uid]
                 current_pot += chip_count
                 preflop_actions.append((seat, "posts", chip_count))
@@ -119,7 +134,6 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
                     t = re.findall(normal_action_regex, line)
 
                 uid, action, chip_count = t[0]
-                chip_count = chip_count.replace(',', '')
 
                 if chip_count == "":
                     chip_count = None
@@ -141,7 +155,6 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
                     t = re.findall(normal_action_regex, line)
 
                 uid, action, chip_count = t[0]
-                chip_count = chip_count.replace(',', '')
 
                 if chip_count == "":
                     chip_count = None
@@ -165,7 +178,6 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
                     t = re.findall(normal_action_regex, line)
 
                 uid, action, chip_count = t[0]
-                chip_count = chip_count.replace(',', '')
 
                 if chip_count == "":
                     chip_count = None
@@ -187,7 +199,6 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
                     t = re.findall(normal_action_regex, line)
 
                 uid, action, chip_count = t[0]
-                chip_count = chip_count.replace(',', '')
 
                 if chip_count == "":
                     chip_count = None
@@ -212,7 +223,6 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
                     t = re.findall(normal_action_regex, line)
 
                 uid, action, chip_count = t[0]
-                chip_count = chip_count.replace(',', '')
 
                 if chip_count == "":
                     chip_count = None
@@ -234,7 +244,6 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
                     t = re.findall(normal_action_regex, line)
 
                 uid, action, chip_count = t[0]
-                chip_count = chip_count.replace(',', '')
 
                 if chip_count == "":
                     chip_count = None
@@ -257,7 +266,6 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
                     t = re.findall(normal_action_regex, line)
 
                 uid, action, chip_count = t[0]
-                chip_count = chip_count.replace(',', '')
 
                 if chip_count == "":
                     chip_count = None
@@ -279,7 +287,6 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
                     t = re.findall(normal_action_regex, line)
 
                 uid, action, chip_count = t[0]
-                chip_count = chip_count.replace(',', '')
 
                 if chip_count == "":
                     chip_count = None
@@ -341,6 +348,8 @@ def calculate_start_round_stacks(uid_to_seatstack, preflop_actions = None, flop_
 
 
 def ggpoker_to_schema(round):
+    round = round.replace('\x00', '')
+    round = convert_cash_game(round)
     lines = round.split("\n")
 
     # needed for all rounds (pre-flop, flop, turn, river)
@@ -388,3 +397,25 @@ def ggpoker_to_schema(round):
         finals.append((game_state, label))
 
     return finals
+
+
+def convert_cash_game(hand_history):
+    # print("Before: ", hand_history)
+
+    # Function to convert cash amounts to chips
+    def convert_to_chips(match):
+        amount = match.group(1)
+        if amount.startswith('$'):
+            # Remove $ and convert to chips (multiply by 100)
+            if amount == '$,':
+                return ""
+            return str(int(float(amount[1:].replace(',', '')) * 100))
+        else:
+            # Just remove commas from tournament numbers
+            return amount.replace(',', '')
+
+    hand_history = re.sub(r'(\$[\d,.]+|[\d,]+)', convert_to_chips, hand_history)
+
+    # print("After: ", hand_history)
+
+    return hand_history
