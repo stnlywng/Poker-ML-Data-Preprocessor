@@ -84,6 +84,32 @@ def extract_hole(round):
     if match:
         return (match.group(1), match.group(2))
 
+def process_action_line(line, uid_to_seatstack):
+    """Helper function to process action lines consistently"""
+    if "raises" in line:
+        t = re.findall(raise_regex, line)
+    else:
+        t = re.findall(normal_action_regex, line)
+
+    if not t:
+        return None
+
+    uid, action, chip_count = t[0]
+    
+    # Handle empty or invalid chip counts
+    if not chip_count or chip_count == "":
+        chip_count = None
+    else:
+        try:
+            chip_count = int(chip_count)
+        except (ValueError, TypeError):
+            chip_count = None
+
+    if "all-in" in line:
+        action += " all-in"
+
+    seat, stack = uid_to_seatstack[uid]
+    return (seat, action, chip_count)
 
 # (Start Round Pot, All Actions Till Round (multiple arrays could be), Current Round Actoins, Label - (action, chip_count)))
 def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack):
@@ -113,11 +139,15 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
         if current_round == "":
             if "posts" in line:
                 t = re.findall(posts_regex, line)
-                uid, chip_count = t[0]
-                chip_count = int(chip_count)
-                seat, stack = uid_to_seatstack[uid]
-                current_pot += chip_count
-                preflop_actions.append((seat, "posts", chip_count))
+                if t:
+                    uid, chip_count = t[0]
+                    try:
+                        chip_count = int(chip_count)
+                        seat, stack = uid_to_seatstack[uid]
+                        current_pot += chip_count
+                        preflop_actions.append((seat, "posts", chip_count))
+                    except (ValueError, TypeError):
+                        continue
             elif "HOLE CARDS" in line:
                 current_round = "pf"
                 pf_start_pot = current_pot
@@ -128,177 +158,84 @@ def rectrieve_actions_chip_counts_labels_for_hero(round, lines, uid_to_seatstack
                 current_round = "f"
                 flop_start_pot = current_pot
             elif "Hero" in line:
-                if "raises" in line:
-                    t = re.findall(raise_regex, line)
-                else:
-                    t = re.findall(normal_action_regex, line)
-
-                uid, action, chip_count = t[0]
-
-                if chip_count == "":
-                    chip_count = None
-                else:
-                    chip_count = int(chip_count)
-                    current_pot += chip_count
-
-                if "all-in" in line:
-                    action += " all-in"
-
-                seat, stack = uid_to_seatstack[uid]
-
-                preflop.append((pf_start_pot, preflop_actions.copy(), (action, chip_count)))
-                preflop_actions.append((seat, action, chip_count))
+                action_data = process_action_line(line, uid_to_seatstack)
+                if action_data:
+                    seat, action, chip_count = action_data
+                    if chip_count is not None:
+                        current_pot += chip_count
+                    preflop.append((pf_start_pot, preflop_actions.copy(), (action, chip_count)))
+                    preflop_actions.append((seat, action, chip_count))
             else:
-                if "raises" in line:
-                    t = re.findall(raise_regex, line)
-                else:
-                    t = re.findall(normal_action_regex, line)
-
-                uid, action, chip_count = t[0]
-
-                if chip_count == "":
-                    chip_count = None
-                else:
-                    chip_count = int(chip_count)
-                    current_pot += chip_count
-
-                if "all-in" in line:
-                    action += " all-in"
-
-                seat, stack = uid_to_seatstack[uid]
-                preflop_actions.append((seat, action, chip_count))
+                action_data = process_action_line(line, uid_to_seatstack)
+                if action_data:
+                    seat, action, chip_count = action_data
+                    if chip_count is not None:
+                        current_pot += chip_count
+                    # else:
+                    #     print("line1 - :", line)
+                    #     print(f"vals: {seat} {action} {chip_count}")
+                    #     print("something wrong1 - :", round)
+                    preflop_actions.append((seat, action, chip_count))
+                # else:
+                #     print("line2 - ", line)
+                #     print(f"vals: {seat} {action} {chip_count}")
+                #     print("something wrong2 - ", round)
         elif current_round == "f":
             if "TURN" in line:
                 current_round = "t"
                 turn_start_pot = current_pot
             elif "Hero" in line:
-                if "raises" in line:
-                    t = re.findall(raise_regex, line)
-                else:
-                    t = re.findall(normal_action_regex, line)
-
-                uid, action, chip_count = t[0]
-
-                if chip_count == "":
-                    chip_count = None
-                else:
-                    chip_count = int(chip_count)
-                    current_pot += chip_count
-
-                if "all-in" in line:
-                    action += " all-in"
-
-                seat, stack = uid_to_seatstack[uid]
-
-                flop.append((flop_start_pot, preflop_actions, flop_actions.copy(), (action, chip_count)))
-                flop_actions.append((seat, action, chip_count))
+                action_data = process_action_line(line, uid_to_seatstack)
+                if action_data:
+                    seat, action, chip_count = action_data
+                    if chip_count is not None:
+                        current_pot += chip_count
+                    flop.append((flop_start_pot, preflop_actions, flop_actions.copy(), (action, chip_count)))
+                    flop_actions.append((seat, action, chip_count))
             else:
-                if "raises" in line:
-                    t = re.findall(raise_regex, line)
-                else:
-                    t = re.findall(normal_action_regex, line)
-
-                uid, action, chip_count = t[0]
-
-                if chip_count == "":
-                    chip_count = None
-                else:
-                    chip_count = int(chip_count)
-                    current_pot += chip_count
-
-                if "all-in" in line:
-                    action += " all-in"
-
-                seat, stack = uid_to_seatstack[uid]
-                flop_actions.append((seat, action, chip_count))
-
+                action_data = process_action_line(line, uid_to_seatstack)
+                if action_data:
+                    seat, action, chip_count = action_data
+                    if chip_count is not None:
+                        current_pot += chip_count
+                    flop_actions.append((seat, action, chip_count))
         elif current_round == "t":
             if "RIVER" in line:
                 current_round = "r"
                 river_start_pot = current_pot
             elif "Hero" in line:
-                if "raises" in line:
-                    t = re.findall(raise_regex, line)
-                else:
-                    t = re.findall(normal_action_regex, line)
-
-                uid, action, chip_count = t[0]
-
-                if chip_count == "":
-                    chip_count = None
-                else:
-                    chip_count = int(chip_count)
-                    current_pot += chip_count
-
-                if "all-in" in line:
-                    action += " all-in"
-
-                seat, stack = uid_to_seatstack[uid]
-
-                turn.append((turn_start_pot, preflop_actions, flop_actions, turn_actions.copy(), (action, chip_count)))
-                turn_actions.append((seat, action, chip_count))
+                action_data = process_action_line(line, uid_to_seatstack)
+                if action_data:
+                    seat, action, chip_count = action_data
+                    if chip_count is not None:
+                        current_pot += chip_count
+                    turn.append((turn_start_pot, preflop_actions, flop_actions, turn_actions.copy(), (action, chip_count)))
+                    turn_actions.append((seat, action, chip_count))
             else:
-                if "raises" in line:
-                    t = re.findall(raise_regex, line)
-                else:
-                    t = re.findall(normal_action_regex, line)
-
-                uid, action, chip_count = t[0]
-
-                if chip_count == "":
-                    chip_count = None
-                else:
-                    chip_count = int(chip_count)
-                    current_pot += chip_count
-
-                if "all-in" in line:
-                    action += " all-in"
-
-                seat, stack = uid_to_seatstack[uid]
-                turn_actions.append((seat, action, chip_count))
+                action_data = process_action_line(line, uid_to_seatstack)
+                if action_data:
+                    seat, action, chip_count = action_data
+                    if chip_count is not None:
+                        current_pot += chip_count
+                    turn_actions.append((seat, action, chip_count))
         elif current_round == "r":
             if "SHOWDOWN" in line:
                 break
             elif "Hero" in line:
-                if "raises" in line:
-                    t = re.findall(raise_regex, line)
-                else:
-                    t = re.findall(normal_action_regex, line)
-
-                uid, action, chip_count = t[0]
-
-                if chip_count == "":
-                    chip_count = None
-                else:
-                    chip_count = int(chip_count)
-                    current_pot += chip_count
-
-                if "all-in" in line:
-                    action += " all-in"
-
-                seat, stack = uid_to_seatstack[uid]
-
-                river.append((river_start_pot, preflop_actions, flop_actions, turn_actions, river_actions.copy(), (action, chip_count)))
-                river_actions.append((seat, action, chip_count))
+                action_data = process_action_line(line, uid_to_seatstack)
+                if action_data:
+                    seat, action, chip_count = action_data
+                    if chip_count is not None:
+                        current_pot += chip_count
+                    river.append((river_start_pot, preflop_actions, flop_actions, turn_actions, river_actions.copy(), (action, chip_count)))
+                    river_actions.append((seat, action, chip_count))
             else:
-                if "raises" in line:
-                    t = re.findall(raise_regex, line)
-                else:
-                    t = re.findall(normal_action_regex, line)
-
-                uid, action, chip_count = t[0]
-
-                if chip_count == "":
-                    chip_count = None
-                else:
-                    chip_count = int(chip_count)
-                    current_pot += chip_count
-
-                if "all-in" in line:
-                    action += " all-in"
-
-                seat, stack = uid_to_seatstack[uid]
-                river_actions.append((seat, action, chip_count))
+                action_data = process_action_line(line, uid_to_seatstack)
+                if action_data:
+                    seat, action, chip_count = action_data
+                    if chip_count is not None:
+                        current_pot += chip_count
+                    river_actions.append((seat, action, chip_count))
 
     return preflop, flop, turn, river
 
