@@ -21,6 +21,8 @@ Flexible and extensible for processing poker game data across multiple stages of
 - **Scalable Data Processing**:
   - Integration with PySpark for high-performance distributed data processing.
   - Able to process all files in a given directory—easy and quick use.
+- **Works with all Styles**:
+  - Cash Games, Tournaments, and Spin-and-Go hand histories are all supported and work seamlessly.
 
 ---
 
