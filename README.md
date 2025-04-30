@@ -9,7 +9,8 @@
 ---
 
 ## Project Overview
-Designed to parse and prepare Poker Hand History (No Limit Holdem) for Machine Learning, making use of PySpark to process and structure data via a distributed system.
+Designed to parse and prepare Poker Hand History (No Limit Holdem) for Machine Learning, making use of PySpark to process and structure data via a distributed system. 
+Idea is that for each decision that the hero makes, we take a snapshot of the spot as the input-features, and the hero’s decision as the label. 
 The project is tailored for applications in data analysis, game simulation, and AI model training.
 
 Flexible and extensible for processing poker game data across multiple stages of a game (Preflop, Flop, Turn, River). 
